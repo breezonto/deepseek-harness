@@ -35,7 +35,7 @@ export const NS = 'canvas'
 export const PANEL_ID = 'canvas' as MainPanelId
 
 /** Services required by the sidebar registration, the Remote methods, and access. */
-export const inject = ['slots', 'locale', 'remote', 'remoteAccess']
+export const inject = ['slots', 'locale', 'remote', 'remote.canvas', 'remoteAccess']
 
 /**
  * Contribute the Canvas entry to the sidebar with the management page it opens,

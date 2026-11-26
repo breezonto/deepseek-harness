@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest'
+import { Context } from '@deepseek-ai/cordis'
 import { brandString } from '@deepseek-ai/dsh-brand'
+import Storage from '@deepseek-ai/dsh-storage'
+import { DomainFacility } from '@deepseek-ai/dsh-storage-domain'
 import type { SessionId } from '@deepseek-ai/dsh-session/types'
 import type { CanvasId, CanvasRendererId } from '../src/types.ts'
+import CanvasService from '../src/index.ts'
+import { associationKey, canvasDomain } from '../src/storage.ts'
+import { MemoryMediaPool, MemoryStorageBackend } from '../../../storage/storage-domain/tests/helpers/memory-backend.ts'
 import { harness } from './harness.ts'
 
 const sessionA = brandString<SessionId>('session-a')
@@ -80,11 +86,45 @@ describe('Cross-session sharing', () => {
     const second = await service.create({ name: 'Second' })
     await service.attach({ canvasId: first.id, sessionId: sessionA })
     await service.attach({ canvasId: second.id, sessionId: sessionA })
+    expect((await service.listAttached({ sessionId: sessionA })).canvasIds).toEqual([first.id, second.id])
     expect((await service.getContext({ sessionId: sessionA })).canvasId).toBe(first.id)
     await service.setContext({ sessionId: sessionA, canvasId: second.id })
     const context = await service.getContext({ sessionId: sessionA })
     expect(context.canvasId).toBe(second.id)
     expect(context.canvas?.name).toBe('Second')
+  })
+
+  it('orders attached canvases by attach time, not storage order', async () => {
+    // Build a context with the domain facility but no Canvas service, insert two
+    // associations in an order that contradicts their attach times, then mount
+    // the service and confirm listAttached returns them oldest-first.
+    const ctx = new Context()
+    await ctx.plugin(Storage)
+    const pool = new MemoryMediaPool()
+    const backend = new MemoryStorageBackend(pool)
+    ctx.effect(() => ctx.storage.backend.register('fixture', backend))
+    ctx.effect(() => async () => { await backend.close() })
+    const facility = new DomainFacility(ctx, { backend: 'fixture' })
+    ctx.effect(() => {
+      const unmount = ctx.storage.mount('domain', facility)
+      ctx.provide('storageDomain', facility)
+      return async () => { await facility.closeAll(); unmount() }
+    })
+
+    const early = brandString<CanvasId>('canvas-early')
+    const late = brandString<CanvasId>('canvas-late')
+    const domain = await facility.open(canvasDomain)
+    await domain.table('associations').put(associationKey(late, sessionA), {
+      canvasId: late, sessionId: sessionA, attachedAt: '2026-01-01T00:00:02.000Z',
+    })
+    await domain.table('associations').put(associationKey(early, sessionA), {
+      canvasId: early, sessionId: sessionA, attachedAt: '2026-01-01T00:00:01.000Z',
+    })
+    await domain.close()
+
+    await ctx.plugin(CanvasService)
+    expect((await ctx.canvas.listAttached({ sessionId: sessionA })).canvasIds).toEqual([early, late])
+    await ctx.fiber.dispose()
   })
 })
 

@@ -16,7 +16,7 @@ import type {
   CanvasListResult, CanvasNotFound, CanvasRecord, CanvasRendererDescriptor, CanvasRendererId, CanvasRendererListResult,
   CanvasResourceReference, CanvasSetContextRequest, CanvasSetContextResult, CanvasSummary, CanvasUpdateRequest, CanvasUpdateResult,
 } from './types.ts'
-import { associationKey, canvasDomain, canvasRecordSchema, type CanvasSessionContext, type StoredCanvasRecord } from './storage.ts'
+import { associationKey, canvasDomain, canvasRecordSchema, type CanvasAssociation, type CanvasSessionContext, type StoredCanvasRecord } from './storage.ts'
 
 /** Default Canvas list page size. */
 export const DEFAULT_LIST_LIMIT = 100
@@ -366,6 +366,7 @@ export class CanvasService extends TypertRemoteService {
     const associations = [...(await this.getDomain()).table('associations').entries()].map(([, assoc]) => assoc)
     const canvasIds = associations
       .filter(assoc => assoc.sessionId === request.sessionId)
+      .sort(compareAttachments)
       .map(assoc => assoc.canvasId)
     return { sessionId: request.sessionId, canvasIds }
   }
@@ -495,6 +496,11 @@ export function summarize(record: StoredCanvasRecord): CanvasSummary {
 /** Stable ordering: newest update first, ties by identity. */
 function compareSummaries(left: CanvasSummary, right: CanvasSummary): number {
   return right.updatedAt.localeCompare(left.updatedAt) || left.id.localeCompare(right.id)
+}
+
+/** Stable association ordering: earliest attach first, ties by Canvas identity. */
+function compareAttachments(left: CanvasAssociation, right: CanvasAssociation): number {
+  return left.attachedAt.localeCompare(right.attachedAt) || left.canvasId.localeCompare(right.canvasId)
 }
 
 export default CanvasService
