@@ -1,0 +1,25 @@
+# Bilingual-pair consistency record for renderer-guide.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write docs/canvas/renderer-guide.md
+/building-a-canvas-renderer:
+  en: 4b1f123ff083b3fc
+  zh: 3258ef327de99e43
+/building-a-canvas-renderer/1-prerequisites:
+  en: f70d2e7f92aea3da
+  zh: ecf9493e117b5cb4
+/building-a-canvas-renderer/2-register-the-host-descriptor:
+  en: 4a6e3da3d8a55d20
+  zh: 5120ec64709cf872
+/building-a-canvas-renderer/3-register-the-browser-slot-entry:
+  en: 8324faa4751a83a8
+  zh: 185bf930662f60fe
+/building-a-canvas-renderer/4-render-and-edit-the-state:
+  en: 8da670327df0a509
+  zh: d676ccd5196ab096
+/building-a-canvas-renderer/5-wire-the-plugin-into-a-profile:
+  en: 7b2f85d25d296453
+  zh: bc02e3f31893ea0d
+/building-a-canvas-renderer/6-verify:
+  en: 57e534d66ec0bee3
+  zh: fe02e4cdd204cf9c

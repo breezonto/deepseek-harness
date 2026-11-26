@@ -1,0 +1,16 @@
+# Bilingual-pair consistency record for renderers.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write docs/canvas/renderers.md
+/application-renderers:
+  en: 87fff14fbf930428
+  zh: a487d5d609be4190
+/application-renderers/knowledge-graph-visualization:
+  en: 69e855664717eb93
+  zh: 2bd7d9cd8e938f46
+/application-renderers/3d-viewport:
+  en: d082d662fff1d072
+  zh: cc39e662234efe9a
+/application-renderers/node-workflows:
+  en: 6da67d1084e36f79
+  zh: 1e8500f6438c9775

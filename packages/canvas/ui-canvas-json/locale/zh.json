@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Canvas JSON renderer",
+    "description": "Reference Canvas renderer that views and edits structured JSON content."
+  }
+}

@@ -1,0 +1,25 @@
+# Bilingual-pair consistency record for extension.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write docs/canvas/extension.md
+/canvas-renderer-extension:
+  en: 36f9084fdb511eda
+  zh: 643673c8890367ee
+/canvas-renderer-extension/two-halves:
+  en: 69168e2f3d67ab4c
+  zh: 4b19fe491a3c1e4b
+/canvas-renderer-extension/the-descriptor:
+  en: 9ab09d0a8b1fd8c3
+  zh: eba05959c1ddc767
+/canvas-renderer-extension/the-slot-and-its-owner-props:
+  en: 1c69c84c82c4b347
+  zh: c4e179288d2aee86
+/canvas-renderer-extension/state-revision-and-concurrency:
+  en: ed8a32887ccf12e7
+  zh: ee1a241f3130088e
+/canvas-renderer-extension/discovery:
+  en: 98bb7f008269e2d9
+  zh: 8b71e220808f20f9
+/canvas-renderer-extension/wiring:
+  en: 55b7f40c32031e8f
+  zh: 076ec96055c66812

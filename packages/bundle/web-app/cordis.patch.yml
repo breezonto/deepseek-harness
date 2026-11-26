@@ -141,6 +141,11 @@
     - id: schedule
       name: '@deepseek-ai/dsh-schedule'
 
+    # The Canvas service owns the durable Canvas store, Canvas-Session
+    # associations, and the renderer extension registry.
+    - id: canvas
+      name: '@deepseek-ai/dsh-canvas'
+
     # Configuration-surface reads and writes over Typert Remote. Each method
     # reports an actionable error when its settings-domain provider is absent.
     - id: ui-settings-account
@@ -470,6 +475,13 @@
     # service mounted above.
     - id: ui-schedule
       name: '@deepseek-ai/dsh-client-ui-schedule'
+
+    # Canvas host page and the reference JSON renderer, both browser plugins
+    # over the Host Canvas service mounted above.
+    - id: ui-canvas
+      name: '@deepseek-ai/dsh-client-ui-canvas'
+    - id: ui-canvas-json
+      name: '@deepseek-ai/dsh-client-ui-canvas-json'
 
     # Session panel: the header toggle and the floating panel over the main
     # Conversation body, with the Environment section other plugins extend.

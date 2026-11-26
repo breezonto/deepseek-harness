@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Canvas",
+    "description": "A persistent, extensible visual workspace that hosts independently registered renderers and shares state across chat sessions."
+  }
+}
