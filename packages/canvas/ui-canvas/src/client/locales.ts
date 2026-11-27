@@ -7,6 +7,8 @@ export type CanvasLocaleKey =
   | 'error'
   | 'retry'
   | 'rendererUnavailable'
+  | 'sidebar.title'
+  | 'sidebar.toggle'
 
 export const en: Record<CanvasLocaleKey, string> = {
   panel: 'Canvas',
@@ -16,6 +18,8 @@ export const en: Record<CanvasLocaleKey, string> = {
   error: 'The Canvas catalog could not be loaded.',
   retry: 'Retry',
   rendererUnavailable: 'This Canvas uses a renderer that is not available. Its content is preserved.',
+  'sidebar.title': 'Inspector',
+  'sidebar.toggle': 'Toggle inspector',
 }
 
 export const zh: Record<CanvasLocaleKey, string> = {
@@ -26,4 +30,6 @@ export const zh: Record<CanvasLocaleKey, string> = {
   error: '无法加载 Canvas 列表。',
   retry: '重试',
   rendererUnavailable: '此 Canvas 使用的渲染器不可用。其内容已保留。',
+  'sidebar.title': '检查器',
+  'sidebar.toggle': '切换检查器',
 }

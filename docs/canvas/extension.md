@@ -27,6 +27,10 @@ The browser host declares the keyed `canvas.renderer` slot in [slots.ts](../../p
 
 The host stores and forwards the state but never interprets it.
 
+## The inspector sidebar
+
+The Canvas host also declares the keyed `canvas.sidebar` slot, mounted inside the foldable right sidebar of the Canvas view under the selected application's renderer id. It receives the same `CanvasRendererOwnerProps` as the renderer, so an application can put its own widgets there — a model URL field or camera controls — instead of crowding the viewport. Registration is optional: an application without sidebar widgets leaves the sidebar body empty.
+
 ## State, revision, and concurrency
 
 A renderer owns the Canvas `state`, which is opaque lossless JSON (`JsonValue`). The host stores it unchanged and returns it in `record.state`. To change it the renderer calls `update({ id, patch: { state }, expectedRevision })`; a stale `expectedRevision` returns `canvas_conflict` instead of overwriting, and every committed change emits `canvas/changed` so other Sessions and the browser refresh. The event is declared in [types.ts](../../packages/canvas/canvas/src/types.ts) and forwarded to the browser through [api-remotes](../../packages/api/remotes/src/remote-events.ts).

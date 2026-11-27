@@ -27,6 +27,10 @@ Canvas renderer 是一个独立插件，它教会 Canvas 如何呈现并编辑�
 
 宿主只存储并转发状态，从不解释它。
 
+## 检查器侧边栏
+
+Canvas 宿主还声明了带键的 `canvas.sidebar` slot，它挂载在 Canvas 视图可折叠的右侧边栏中，键为所选应用的 renderer id。它接收与 renderer 相同的 `CanvasRendererOwnerProps`，因此应用可以把自有控件放在那里 —— 例如模型 URL 输入框或相机控制 —— 而不必挤占视口。注册是可选的：没有侧边栏控件的应用会让侧边栏正文保持为空。
+
 ## 状态、修订与并发
 
 renderer 拥有 Canvas 的 `state`，它是不透明的无损 JSON（`JsonValue`）。宿主原样存储它，并在 `record.state` 中返回。要修改它，renderer 调用 `update({ id, patch: { state }, expectedRevision })`；陈旧的 `expectedRevision` 会返回 `canvas_conflict` 而非覆盖，且每次已提交的修改都会发出 `canvas/changed`，使其他会话与浏览器刷新。该事件声明于 [types.ts](../../packages/canvas/canvas/src/types.ts)，并经 [api-remotes](../../packages/api/remotes/src/remote-events.ts) 转发到浏览器。

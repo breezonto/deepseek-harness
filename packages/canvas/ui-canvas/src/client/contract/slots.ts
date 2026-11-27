@@ -16,6 +16,17 @@ declare module '@deepseek-ai/dsh-client-ui-slots' {
       scope: 'root'
       owner: CanvasRendererOwnerProps
     }
+    /**
+     * One renderer's right-sidebar inspector, keyed by renderer id. The Canvas
+     * host mounts the entry whose key matches the selected application's
+     * renderer id inside the foldable Canvas sidebar; the renderer contributes
+     * its own widgets there (for example, a model-URL field).
+     */
+    'canvas.sidebar': {
+      kind: 'keyed'
+      scope: 'root'
+      owner: CanvasRendererOwnerProps
+    }
   }
 }
 

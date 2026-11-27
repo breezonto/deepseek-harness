@@ -2,11 +2,13 @@
  * Canvas host page: the global panel that hosts independently registered
  * application renderers. Each renderer advertising the `application` capability
  * becomes a top-level tab; selecting a tab mounts that renderer directly and
- * provisions a singleton Canvas for it on first use. This page never interprets
- * renderer state.
+ * provisions a singleton Canvas for it on first use. A foldable right sidebar
+ * hosts the selected renderer's own inspector widgets through the keyed
+ * `canvas.sidebar` slot. This page never interprets renderer state.
  */
 import { useCallback, useEffect, useState } from 'react'
 import type { CSSProperties } from 'react'
+import { IconPanelLeftOutlineRegular } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { InjectFace, PropsLocale, PropsRenderSlots, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
 import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
 import type {
@@ -27,9 +29,9 @@ export interface CanvasPageInjected {
   readonly onChange: (listener: () => void) => () => void
 }
 
-/** Full page props: runtime share, the declared renderer child slot, injected face, and locale. */
+/** Full page props: runtime share, the declared renderer and sidebar child slots, injected face, and locale. */
 export type CanvasPageProps = PropsRuntime<'main'>
-  & PropsRenderSlots<'canvas.renderer'>
+  & PropsRenderSlots<'canvas.renderer' | 'canvas.sidebar'>
   & InjectFace<CanvasPageInjected>
   & PropsLocale<'canvas'>
 
@@ -47,6 +49,7 @@ export function CanvasPage({ remote, onChange, t, renderSlot }: CanvasPageProps)
   const [renderers, setRenderers] = useState<readonly CanvasRendererDescriptor[]>([])
   const [selectedAppId, setSelectedAppId] = useState<CanvasRendererId | null>(null)
   const [record, setRecord] = useState<CanvasRecord | null>(null)
+  const [sidebarExpanded, setSidebarExpanded] = useState(true)
 
   const apps = renderers.filter(item => item.capabilities.application === true)
 
@@ -140,19 +143,49 @@ export function CanvasPage({ remote, onChange, t, renderSlot }: CanvasPageProps)
                 {app.name}
               </button>
             ))}
+            <button
+              type="button"
+              style={iconToggle}
+              aria-label={t('sidebar.toggle')}
+              aria-pressed={sidebarExpanded}
+              onClick={() => { setSidebarExpanded(value => !value) }}
+            >
+              <span style={mirror}><IconPanelLeftOutlineRegular size={15} /></span>
+            </button>
           </div>
 
-          <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-            {selectedAppId === null
-              ? <div style={pad}><div style={label}>{t('rendererUnavailable')}</div></div>
-              : record === null
-                ? <div style={pad}>{t('loading')}</div>
-                : renderSlot(
-                  'canvas.renderer',
-                  { canvasId: record.id, record, update: handleUpdate },
-                  { entryKey: selectedAppId, fallback: <div style={pad}><div style={label}>{t('rendererUnavailable')}</div></div> },
+          {selectedAppId === null || record === null
+            ? (
+              <div style={{ flex: 1, minHeight: 0 }}>
+                <div style={pad}>{record === null ? t('loading') : t('rendererUnavailable')}</div>
+              </div>
+            )
+            : (
+              <div style={{ flex: 1, minHeight: 0, position: 'relative', minWidth: 0 }}>
+                <div style={{ position: 'absolute', inset: 0 }}>
+                  {renderSlot(
+                    'canvas.renderer',
+                    { canvasId: record.id, record, update: handleUpdate },
+                    { entryKey: selectedAppId, fallback: <div style={pad}><div style={label}>{t('rendererUnavailable')}</div></div> },
+                  )}
+                </div>
+
+                {sidebarExpanded && (
+                  <aside style={sidebarOverlay} aria-label={t('sidebar.title')}>
+                    <div style={sidebarHeader}>
+                      <span style={sidebarTitle}>{t('sidebar.title')}</span>
+                    </div>
+                    <div style={sidebarBody}>
+                      {renderSlot(
+                        'canvas.sidebar',
+                        { canvasId: record.id, record, update: handleUpdate },
+                        { entryKey: selectedAppId },
+                      )}
+                    </div>
+                  </aside>
                 )}
-          </div>
+              </div>
+            )}
         </>
       )}
     </div>
@@ -165,7 +198,7 @@ const button: CSSProperties = {
   border: '1px solid var(--dsw-alias-border-l2)', borderRadius: 6, padding: '4px 10px', cursor: 'pointer',
 }
 const tabBar: CSSProperties = {
-  display: 'flex', alignItems: 'stretch', gap: 2, padding: '4px 12px 0', flexShrink: 0,
+  display: 'flex', alignItems: 'flex-end', gap: 2, padding: '4px 12px 0', flexShrink: 0,
   borderBottom: '1px solid var(--dsw-alias-border-l2)',
 }
 const tab: CSSProperties = {
@@ -177,3 +210,25 @@ const tabActive: CSSProperties = {
   color: 'var(--dsw-alias-label-primary)', fontWeight: 600,
   borderBottom: '2px solid var(--dsw-alias-brand-primary)',
 }
+const iconToggle: CSSProperties = {
+  marginLeft: 'auto', marginBottom: 4, padding: 6, display: 'inline-flex', alignItems: 'center',
+  justifyContent: 'center', background: 'transparent', border: 'none', borderRadius: 6, cursor: 'pointer',
+  color: 'var(--dsw-alias-label-secondary)', flex: 'none',
+}
+const mirror: CSSProperties = { display: 'inline-flex', transform: 'scaleX(-1)' }
+const sidebarOverlay: CSSProperties = {
+  position: 'absolute', top: 12, right: 12, bottom: 12, width: 300, zIndex: 20,
+  display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'hidden',
+  background: 'color-mix(in srgb, var(--dsw-alias-bg-layer-1) 92%, transparent)',
+  border: '1px solid var(--dsw-alias-border-l2)',
+  borderRadius: 'var(--dsw-radius-xl)',
+  boxShadow: 'var(--dsw-elevation-prominent)',
+}
+const sidebarHeader: CSSProperties = {
+  display: 'flex', alignItems: 'center', gap: 8, padding: '12px 16px', flexShrink: 0,
+  borderBottom: '1px solid var(--dsw-alias-border-l2)',
+}
+const sidebarTitle: CSSProperties = {
+  flex: 1, minWidth: 0, color: 'var(--dsw-alias-label-primary)', fontSize: 14, fontWeight: 600,
+}
+const sidebarBody: CSSProperties = { flex: 1, minHeight: 0, overflowY: 'auto', padding: '12px 16px 16px' }

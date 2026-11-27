@@ -76,6 +76,7 @@ export function apply(ctx: ClientContext): void {
       inject: (): CanvasPageInjected => ({ remote, onChange }),
       children: {
         'canvas.renderer': { kind: 'keyed', scope: 'root' },
+        'canvas.sidebar': { kind: 'keyed', scope: 'root' },
       },
     }, CanvasPage))
     yield ctx.slots.inject('sidebar.panellist', () => ctx.slots.register({

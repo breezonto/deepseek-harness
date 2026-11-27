@@ -80,7 +80,7 @@ export interface CanvasRendererCapabilities {
   readonly selection?: boolean
   readonly interaction?: boolean
   readonly serialization?: boolean
-  /** The renderer is a standalone application the Canvas host surfaces directly as the top-level view. */
+  /** The renderer is a standalone application the Canvas host surfaces as a top-level tab. */
   readonly application?: boolean
 }
 
