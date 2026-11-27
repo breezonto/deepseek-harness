@@ -243,6 +243,22 @@ export const VIEWER_ENDPOINT_CLASSES = {
   'subagents/interruptByUser': 'owner-only', // owner subagents
   'subagents/prompt': 'owner-only', // owner subagents
 
+  // Canvas is a host-wide durable visual workspace. LiveShare has no Canvas
+  // sharing design yet, so every management and read endpoint stays owner-only
+  // (the conservative class) until a viewer role is defined for it.
+  'canvas/attach': 'owner-only', // owner attaches a Canvas to a Session
+  'canvas/catalog': 'owner-only', // owner reads the Canvas catalog
+  'canvas/create': 'owner-only', // owner creates a Canvas
+  'canvas/delete': 'owner-only', // owner deletes a Canvas
+  'canvas/detach': 'owner-only', // owner detaches a Canvas from a Session
+  'canvas/get': 'owner-only', // owner reads one Canvas
+  'canvas/getContext': 'owner-only', // owner reads a Session's Canvas context
+  'canvas/list': 'owner-only', // owner lists Canvas instances
+  'canvas/listAttached': 'owner-only', // owner lists a Session's Canvases
+  'canvas/listRenderers': 'owner-only', // owner discovers Canvas renderers
+  'canvas/setContext': 'owner-only', // owner selects a Session's Canvas context
+  'canvas/update': 'owner-only', // owner updates a Canvas
+
   // Owner share management stays on the owner's own page; a `share-viewer` Peer is refused first.
   'liveshareShares/audit': 'owner-only',
   'liveshareShares/capabilities': 'owner-only',
