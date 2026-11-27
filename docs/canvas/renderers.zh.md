@@ -16,7 +16,7 @@ Canvas 随附一个参考 renderer。一个 Canvas 插件可以通过拥有 rend
 
 ## 3D 视口
 
-3D 视口 renderer 呈现一个场景，并把重量级资产排除在 Canvas 状态之外。它把相机与场景元数据存入 `state`，并通过 `CanvasResourceReference` 引用网格与纹理，从而让宿主在追踪引用时不内嵌这些资产。
+3D 视口 renderer 呈现一个场景，并把重量级资产排除在 Canvas 状态之外。它把相机与场景元数据存入 `state`，并通过 `CanvasResourceReference` 引用网格与纹理，从而让宿主在追踪引用时不内嵌这些资产。它声明 `application` 与 `interaction` 能力，因此 Canvas 宿主会将其作为 Canvas 视图中的顶层标签页呈现。
 
 ## 节点工作流
 

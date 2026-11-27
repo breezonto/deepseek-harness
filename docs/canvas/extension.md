@@ -15,7 +15,7 @@ The reference renderer shows the split: the descriptor lives in [the JSON render
 
 ## The descriptor
 
-`CanvasRendererDescriptor` names the renderer and its opt-in capabilities. Its fields are `id`, `name`, `description`, `contentTypes`, `capabilities`, and an optional `default`; the capability flags are `selection`, `interaction`, and `serialization`. The host validates a `rendererId` against the registered set and picks a default by the `default` flag, falling back to the first registered renderer. The type is declared in [types.ts](../../packages/canvas/canvas/src/types.ts); the registry and default selection live in [index.ts](../../packages/canvas/canvas/src/index.ts).
+`CanvasRendererDescriptor` names the renderer and its opt-in capabilities. Its fields are `id`, `name`, `description`, `contentTypes`, `capabilities`, and an optional `default`; the capability flags are `selection`, `interaction`, `serialization`, and `application`. A renderer that advertises `application` is a standalone application: the Canvas host surfaces it as a top-level tab, provisioning a singleton Canvas for it, instead of behind the catalog and metadata chrome. The host validates a `rendererId` against the registered set and picks a default by the `default` flag, falling back to the first registered renderer. The type is declared in [types.ts](../../packages/canvas/canvas/src/types.ts); the registry and default selection live in [index.ts](../../packages/canvas/canvas/src/index.ts).
 
 ## The slot and its owner props
 

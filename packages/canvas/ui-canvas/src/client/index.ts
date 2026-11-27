@@ -59,7 +59,6 @@ export function apply(ctx: ClientContext): void {
       get: id => value(ctx.remote.canvas.get({ id })),
       create: request => value(ctx.remote.canvas.create(request)),
       update: request => value(ctx.remote.canvas.update(request)),
-      remove: id => value(ctx.remote.canvas.delete({ id })),
       renderers: () => value(ctx.remote.canvas.listRenderers()),
     }
     const onChange = (listener: () => void): (() => void) => {

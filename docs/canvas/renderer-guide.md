@@ -10,7 +10,7 @@ The plugin needs no service beyond the two Canvas already provides. The Host hal
 
 ## 2. Register the Host descriptor
 
-The Host half calls `ctx.canvas.registerRenderer` with a `CanvasRendererDescriptor`. Pick a stable `id` — the browser slot entry reuses it — and set `default` only when this renderer should win when a Canvas is created without one.
+The Host half calls `ctx.canvas.registerRenderer` with a `CanvasRendererDescriptor`. Pick a stable `id` — the browser slot entry reuses it — and set `default` only when this renderer should win when a Canvas is created without one. Advertise the `application` capability when the renderer is a standalone application: the Canvas host then surfaces it as a top-level tab.
 
 ## 3. Register the browser slot entry
 
@@ -34,4 +34,4 @@ Mount `tool-canvas` in the agent preset so agents can create and update Canvases
 
 ## 6. Verify
 
-Open the Canvas page, create a Canvas, and confirm the renderer mounts for the selected `rendererId`. Change the state from the page and from an agent through `canvas_update`; both edits should refresh through `canvas/changed`.
+Open the Canvas page and confirm the renderer mounts: an `application` renderer appears as a top-level tab, otherwise create a Canvas through the `canvas_create` tool and select the renderer. Change the state from the page and from an agent through `canvas_update`; both edits should refresh through `canvas/changed`.

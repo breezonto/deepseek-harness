@@ -15,7 +15,7 @@ Canvas renderer 是一个独立插件，它教会 Canvas 如何呈现并编辑�
 
 ## 描述符
 
-`CanvasRendererDescriptor` 命名 renderer 及其可选的各项能力。其字段为 `id`、`name`、`description`、`contentTypes`、`capabilities` 与可选的 `default`；能力标志为 `selection`、`interaction` 与 `serialization`。宿主会依据已注册集合校验 `rendererId`，并依据 `default` 标志选择默认项，若无则回退到第一个已注册的 renderer。该类型声明于 [types.ts](../../packages/canvas/canvas/src/types.ts)；注册表与默认选择逻辑位于 [index.ts](../../packages/canvas/canvas/src/index.ts)。
+`CanvasRendererDescriptor` 命名 renderer 及其可选的各项能力。其字段为 `id`、`name`、`description`、`contentTypes`、`capabilities` 与可选的 `default`；能力标志为 `selection`、`interaction`、`serialization` 与 `application`。声明 `application` 的 renderer 是一个独立应用：Canvas 宿主会将其作为顶层标签页呈现，并为其提供单一 Canvas，而非置于目录与元数据界面之后。宿主会依据已注册集合校验 `rendererId`，并依据 `default` 标志选择默认项，若无则回退到第一个已注册的 renderer。该类型声明于 [types.ts](../../packages/canvas/canvas/src/types.ts)；注册表与默认选择逻辑位于 [index.ts](../../packages/canvas/canvas/src/index.ts)。
 
 ## slot 及其宿主属性
 

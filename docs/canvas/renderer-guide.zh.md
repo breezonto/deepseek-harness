@@ -10,7 +10,7 @@
 
 ## 2. 注册 Host 描述符
 
-Host 半边调用 `ctx.canvas.registerRenderer`，传入一个 `CanvasRendererDescriptor`。选择一个稳定的 `id` —— 浏览器 slot 条目会复用它 —— 并且仅当在创建 Canvas 时未指定 renderer 且本 renderer 应当胜出时，才设置 `default`。
+Host 半边调用 `ctx.canvas.registerRenderer`，传入一个 `CanvasRendererDescriptor`。选择一个稳定的 `id` —— 浏览器 slot 条目会复用它 —— 并且仅当在创建 Canvas 时未指定 renderer 且本 renderer 应当胜出时，才设置 `default`。当 renderer 是独立应用时，声明 `application` 能力：Canvas 宿主会将其作为顶层标签页呈现。
 
 ## 3. 注册浏览器 slot 条目
 
@@ -34,4 +34,4 @@ Host 半边调用 `ctx.canvas.registerRenderer`，传入一个 `CanvasRendererDe
 
 ## 6. 验证
 
-打开 Canvas 页面，创建一个 Canvas，并确认该 renderer 会针对选中的 `rendererId` 挂载。分别从页面和通过 agent 的 `canvas_update` 修改状态；两处编辑都应通过 `canvas/changed` 刷新。
+打开 Canvas 页面并确认该 renderer 挂载：声明 `application` 的 renderer 会作为顶层标签页呈现，否则通过 `canvas_create` 工具创建一个 Canvas 并选择该 renderer。分别从页面和通过 agent 的 `canvas_update` 修改状态；两处编辑都应通过 `canvas/changed` 刷新。

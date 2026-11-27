@@ -16,7 +16,7 @@ It advertises the `selection` and `interaction` capabilities and names the graph
 
 ## 3D viewport
 
-A 3D viewport renderer presents a scene and keeps heavyweight assets out of the Canvas state. It stores camera and scene metadata in `state` and references meshes and textures through `CanvasResourceReference`, so the host tracks the references without embedding the assets.
+A 3D viewport renderer presents a scene and keeps heavyweight assets out of the Canvas state. It stores camera and scene metadata in `state` and references meshes and textures through `CanvasResourceReference`, so the host tracks the references without embedding the assets. It advertises the `application` and `interaction` capabilities, so the Canvas host surfaces it as a top-level tab in the Canvas view.
 
 ## Node workflows
 
